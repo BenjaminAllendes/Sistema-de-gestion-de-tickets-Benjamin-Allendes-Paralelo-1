@@ -1,5 +1,4 @@
 #include "list.h"
-#include "queue.h"
 #include "extra.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,7 +47,7 @@ void registrar_ticket(List *tickets, List *PB) {
   scanf(" %[^\n]s", tick->ID) ;
   if (buscar_ticket(tickets, tick->ID) != NULL) {
     printf("Este ticket ya ha sido registrado!\n") ;
-    free(tick) ; 
+    free(tick) ; // Se libera la memoria del ticket 
     return ;
   }
   printf("Descripcion del problema: ") ;
@@ -78,7 +77,7 @@ void mover_ticket(ticket *tick, List *lista_agregar, List *lista_prioridad){
     actual = list_next(lista_prioridad) ;
   }  
   ticket *aux = list_popCurrent(lista_prioridad) ;
-  list_sortedInsert(lista_agregar, aux, compararTickets) ;
+  list_sortedInsert(lista_agregar, aux, compararTickets) ; // Ingresa el ticket por orden de ingreso
 
 }
 
@@ -115,10 +114,11 @@ void asignar_prioridad(List *tickets, List *PB, List *PM, List *PA){
     scanf(" %c", &opcion) ;
   }
   if (ticket_buscado->prioridad_chr == opcion) {
-    printf("El ticket ya tiene esa prioridad\n") ; 
+    printf("El ticket ya tiene esa prioridad\n") ;  
     return ;
   }
 
+  
   switch (opcion)
   {
     case '1':
@@ -146,7 +146,7 @@ void asignar_prioridad(List *tickets, List *PB, List *PM, List *PA){
 
 }
 
-// Muestra todos los tickets de la lista con su problema
+// Muestra todos los tickets de la lista con su prioridad
 void mostrarLista(List *L){
   List *lista_auxiliar = list_create() ;
   ticket *current = list_first(L) ;
@@ -171,6 +171,7 @@ void mostrar_lista_tickets(List *listatickets, List *PB, List *PM, List *PA) {
 }
 
 
+// Se busca el ticket y se eilima de la lista
 void eliminarTicket(List *lista_tickets, ticket *tick) {
   ticket *current = list_first(lista_tickets) ;
   while (current != tick) {
@@ -179,6 +180,7 @@ void eliminarTicket(List *lista_tickets, ticket *tick) {
   list_popCurrent(lista_tickets) ;
 }
 
+// Muestra toda la informacion del ticket
 void mostrar_info_ticket(ticket *tick){
   struct tm * timeinfo;
   timeinfo = localtime(&tick->hora) ;
@@ -188,7 +190,7 @@ void mostrar_info_ticket(ticket *tick){
 }
 
 
-// Se va revisando lista por lista por orden de prioridad
+// Se va revisando lista por lista por orden de prioridad e ingreso y se elimina el ticket que tiene que ser procesado.
 void atender_ticket(List *lista_tickets, List *PB, List *PM, List *PA){
   int count = 0 ;
   if (queue_front(PA) != NULL) {
@@ -215,6 +217,7 @@ void atender_ticket(List *lista_tickets, List *PB, List *PM, List *PA){
   if (count == 0) printf("No se ha registrado ningun ticket.\n") ;
 }
 
+// Se busca un ticket por ID y si existe se muestra toda la informacion guardada
 void buscar_mostrar_ticket(List *ticketos){
   char idTicket[100] ;
   printf("ID del ticket: ") ;
